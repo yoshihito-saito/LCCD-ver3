@@ -5,7 +5,7 @@
 mkdir(out_path);
     tic;
 if isempty(gcp('nocreate'))
-    parpool('local', 60); % デフォルトのワーカー数で立ち上げる
+    parpool('local', 32); 
 end
 %% pipeline
 logfname = fullfile(out_path, 'log.txt');
@@ -45,6 +45,6 @@ if options.procs.exec(6)
     MainFun_RegionMapping(options);
 end
 tEnd = toc(tStart);
-fprintf(1,'\t\tElapsed time %4.2f min\n\n', tEnd/60);
+fprintf(1,'\n\tTotalElapsed time %4.2f min\n\n', tEnd/60);
 diary off;
 delete(gcp('nocreate'));
