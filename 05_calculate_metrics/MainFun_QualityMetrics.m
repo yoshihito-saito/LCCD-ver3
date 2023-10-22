@@ -102,6 +102,7 @@ function MainFun_QualityMetrics(options)
     ROI_metrics = struct();
     ROI_metrics.SNR = single(vertcat(SNR.Ratio));
     %ROI_metrics.Artifact = single(art_sig_ratio);
+    ROI_metrics.NoiseVAR = noise_variance;
     ROI_metrics.Area = single(c(:,1));
     ROI_metrics.Centroid = single(c(:,2:3));
     ROI_metrics.CellUse = logical(CellUse);
