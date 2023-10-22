@@ -7,6 +7,7 @@ out_path = append(out_Dir, '/01_ROI_detection/ver_3');
 %raw_path = '/home/ysaito/Synology/Collab/with_Kao/Two-photon/01_data/u059_m01/20200804_saline/data/1';
 %out_path = '/home/ysaito/Synology/Collab/with_Kao/Two-photon/02_analysis/u059_m01/20200826_saline/01_ROI_detection/test_YS_ver2_5_all_3';
 %h5_path = '/home/ysaito/Synology/Collab/with_Kao/Two-photon/02_analysis/u059_m01/20200826_saline/01_ROI_detection/test_YS_ver2';
+addpath(genpath(code_path));
 
 procs = {
     '01_NoRMCorre',         1;... %1
@@ -27,7 +28,7 @@ options.raw_path = raw_path;
 
 options.Samprate = 15.2;
 %% Concatinate multiple recording
-options.concat = true;
+options.concat = 0;
 
 %% for 01_NoRMCorre
 options.opt_noRMCorre.d1 = 1024;
@@ -60,8 +61,8 @@ options.a = 0.8; %0.4 %ROIをマージさせる際の重なっている割合（
 %options.pixels_range = [30, 80];
 
 %% for 04 signal extraction
-options.dilate_pixel_for4.in  = 2; %0:10; % 0 means ROI map detected by LCCD
-options.dilate_pixel_for4.out = 9; %1:11; % 'out' should be larger than 'in'
+options.dilate_pixel_for4.in  = 2; %2
+options.dilate_pixel_for4.out = 5; %9
 
 
 % correction_constant for 04
@@ -70,7 +71,7 @@ options.correction_constant = 0.7;
 
 % for 04
 % Parameters for removing slow component
-options.remove_slow.window     = 60; % (sec)
+options.remove_slow.window     = 60; % (sec) 15sec for Ota et al, 60sec for Stringer et al,
 options.remove_slow.percentile = 8; % (%)
 
 % for 05
@@ -84,4 +85,8 @@ options.Threshold.corr = 0.8; % Threshold for nearby-ROIs correlation
 options.Threshold.nearby = 1.5; % 近傍判定（ROI直径に対する比）
 %
 % IsoretionForest Threshold
-options.art_threshold = 0.65;
+%options.art_threshold = 0.65;
+
+%Noise variance
+options.NoiseLowHigh = [6,7.5];
+options.Threshold.noisevar = 0.03;

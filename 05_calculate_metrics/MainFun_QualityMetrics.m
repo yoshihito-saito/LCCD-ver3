@@ -31,10 +31,12 @@ function MainFun_QualityMetrics(options)
     %% Split Ca response into signal and noise
     fprintf(1,'\tSplit Ca response into signal and noise\n');
     SNR = Sub_Split_CaResponse_SignalNoise(dF_F, options.procs.path{5});
-   
     %% Calculate Signal Noise Ratio
     fprintf(1,'\tCalculate Signal Noise Ratio\n');
     SNR = Sub_Calculate_SignalNoiseRatio(SNR);
+
+    %SNR= Sub_Calc_SNR(dF_F, options);
+   
 
 %{
     %% Historgram SNR
@@ -49,38 +51,42 @@ function MainFun_QualityMetrics(options)
 %}
     %% Check overdivided ROIs 
     [nearby_CellUse, ~] = Sub_Check_nearbyCellToUse(rdF, dPerDia, SNR, Threshold);
-
+    
+    [filtered_dF_F, noise_variance] = Sub_Calc_noise_variance(dF_F, options);
+    % Plot noies and cell signal when you set the threshold
+    Sub_PlotNoisySignal(Time, dF_F, noise_variance, options) 
+    
     %% Decide Cells to Use
-    CellUse = Sub_Decide_CellsToUse(dF_F, SNR, Threshold, nearby_CellUse, options.procs.path{5});
-    
-    %% Artifact detection
-    fprintf(1,'\tArtifact detection\n');
-    dF_F_use = dF_F(CellUse,:);
-    Ratio = vertcat(SNR.Ratio);
-    SNR_use = Ratio(CellUse);
-    art_sig_ratio_use = Sub_ArtifactFreqPower(dF_F_use, SampRate);
-    art_sig_ratio = zeros(size(CellUse,1),1);
-    art_sig_ratio(CellUse==1)=art_sig_ratio_use;
-    art_sig_ratio(CellUse==0)=NaN;
-    predicted_outlier_index = Sub_detectOutlier(art_sig_ratio_use, SNR_use, options.art_threshold);
-    
+    CellUse = Sub_Decide_CellsToUse(dF_F, SNR, Threshold, nearby_CellUse, noise_variance);
 
-    CellUse2 = zeros(size(CellUse,1),1);
-    CellIdx = find(CellUse==1);
-    CellIdx2 = CellIdx(predicted_outlier_index==0);
-    CellUse2(CellIdx2)=1;
+    %% Artifact detection
+    %fprintf(1,'\tArtifact detection\n');
+    %dF_F_use = dF_F(CellUse,:);
+    %Ratio = vertcat(SNR.Ratio);
+    %SNR_use = Ratio(CellUse);
+    %art_sig_ratio_use = Sub_ArtifactFreqPower(dF_F_use, SampRate);
+    %art_sig_ratio = zeros(size(CellUse,1),1);
+    %art_sig_ratio(CellUse==1)=art_sig_ratio_use;
+    %art_sig_ratio(CellUse==0)=NaN;
+    %predicted_outlier_index = Sub_detectOutlier(art_sig_ratio_use, SNR_use, options.art_threshold);
+    
+    
+    %CellUse2 = zeros(size(CellUse,1),1);
+    %CellIdx = find(CellUse==1);
+    %CellIdx2 = CellIdx(predicted_outlier_index==0);
+    %CellUse2(CellIdx2)=1;
     
     %% Plot SNR and artifact/signal freqency power and Signals
-    Sub_PlotOutliearDetection(SNR_use, art_sig_ratio_use, predicted_outlier_index, options.procs.path{5})
-    Sub_PlotSignal(Time, dF_F_use, predicted_outlier_index, options.procs.path{5})
+    %Sub_PlotOutliearDetection(SNR_use, art_sig_ratio_use, predicted_outlier_index, options.procs.path{5})
+    %Sub_PlotSignal(Time, dF_F_use, predicted_outlier_index, options.procs.path{5})
     %% Save ROI Mask images and Metrics
     disp('Create ROI mask images');
     folder_list = dir(fullfile(options.procs.path{3}, 'marged*'));
     file_list = string({dir(append(options.procs.path{3}, '/*/*.mat')).name});
     roi_all = full(load(fullfile(options.procs.path{3}, folder_list(end).name ,file_list(end))).n_roi3);
 
-    nonCell_ID = find(CellUse2==0);
-    Cell_ID = find(CellUse2==1);
+    nonCell_ID = find(CellUse==0);
+    Cell_ID = find(CellUse==1);
     
     nonCell_roi = roi_all.*ismember(roi_all, nonCell_ID);
     nonCell_roi_color = label2rgb(nonCell_roi,'hsv','k','shuffle');
@@ -94,14 +100,14 @@ function MainFun_QualityMetrics(options)
     
     % ROI metrics, SNR, Artifact Power Ratio, Area, Centroid, CellUse
     ROI_metrics = struct();
-    ROI_metrics.SNR = single(Ratio);
-    ROI_metrics.Artifact = single(art_sig_ratio);
+    ROI_metrics.SNR = single(vertcat(SNR.Ratio));
+    %ROI_metrics.Artifact = single(art_sig_ratio);
     ROI_metrics.Area = single(c(:,1));
     ROI_metrics.Centroid = single(c(:,2:3));
-    ROI_metrics.CellUse = logical(CellUse2);
+    ROI_metrics.CellUse = logical(CellUse);
     save(fullfile(options.procs.path{5},'ROI_metrics.mat'), 'ROI_metrics', '-v7.3');
     
-    fprintf(1,'\t\tPercentage of cells to use %f (%%)\n',sum(CellUse2)/length(CellUse2)*100);
-    fprintf(1,'\t\tThe number of cells to use %d neurons\n',sum(CellUse2));
+    fprintf(1,'\t\tPercentage of cells to use %f (%%)\n',sum(CellUse)/length(CellUse)*100);
+    fprintf(1,'\t\tThe number of cells to use %d neurons\n',sum(CellUse));
 end
 

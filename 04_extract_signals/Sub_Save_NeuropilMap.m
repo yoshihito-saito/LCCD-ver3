@@ -1,7 +1,5 @@
 function Sub_Save_NeuropilMap(soma_ROI, options, out_path)
-if isempty(gcp('nocreate'))
-    parpool('local', 30); % 例: 4ワーカーを使用
-end
+
 in  = options.dilate_pixel_for4.in;
 out = options.dilate_pixel_for4.out;
 nROI = max(soma_ROI(:));

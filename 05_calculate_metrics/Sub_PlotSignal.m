@@ -35,7 +35,7 @@ function Sub_PlotSignal(Time, dF_F_use, predicted_outlier_index, out_path)
     xlabel('Time (sec)');
     yticks([])
     box off
-    title('Artifact signal')
+    title('Cell signal')
     exportgraphics(gcf, fullfile(out_path,'Cell_signal.pdf'), 'Resolution',300)
 
     close all

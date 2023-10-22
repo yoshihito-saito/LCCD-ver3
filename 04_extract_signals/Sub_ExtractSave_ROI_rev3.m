@@ -17,6 +17,7 @@ end
 F=cellfun(@(x) mean(ReshapeData(x,:)), Index, 'UniformOutput', false);
 F = cell2mat(F');
 save(SaveFileName,'F');
+fprintf(1,'\t\t\tElapsed time %4.2f min\n\n', toc/60);
 
 end
 

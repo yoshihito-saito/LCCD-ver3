@@ -36,7 +36,6 @@ end
 
 % 05_calculate_SNratio
 if options.procs.exec(5)
-    %MainFun_Calculate_SNratio_rev1(path_6B, path_9B, out_path);
     MainFun_QualityMetrics(options);
 end
 
