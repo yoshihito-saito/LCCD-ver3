@@ -58,7 +58,7 @@ function MainFun_QualityMetrics(options)
     
     %% Decide Cells to Use
     CellUse = Sub_Decide_CellsToUse(dF_F, SNR, Threshold, nearby_CellUse, noise_variance);
-    Sub_Plot_QualityCheck(Time, dF_F, CellUse, options)
+
     %% Artifact detection
     %fprintf(1,'\tArtifact detection\n');
     %dF_F_use = dF_F(CellUse,:);
