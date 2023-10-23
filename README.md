@@ -38,6 +38,6 @@ https://doi.org/10.1016/j.neures.2022.02.008
       <img src="00_images/ROI_montage.png" width="600">
 
 ### For further analysis
-- dF_F0 -> load dF_F.mat from 04
+- dF_F0 -> load dF_F.mat from 04_extract_signals
 - ROI metics -> load ROI_metrics.mat from 05_calculate_metrics
 
