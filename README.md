@@ -36,11 +36,8 @@ https://doi.org/10.1016/j.neures.2022.02.008
    - overlay z-projection image to the ROI_Cell_color and check the ROI poistion and morpholoy
       <img src="00_images/ROI_CellUse_overlay.png" width="600">
       <img src="00_images/ROI_montage.png" width="600">
-      
-4. Artifact detection
-   - open Artifact_detection.pdf, Artifact_signal.pdf, and Cell_signal.pdf in 10_calculate_metrics and check the signals
 
 ### For further analysis
-- dF_F0 -> load data from 09_remove_slowTimeScaleChange/After_SlowComponentCorrection.mat
-- ROI metics -> load data from 10_calculate_metrics/ROI_metrics
+- dF_F0 -> load dF_F.mat from 04
+- ROI metics -> load ROI_metrics.mat from 05_calculate_metrics
 
