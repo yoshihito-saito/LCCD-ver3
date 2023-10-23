@@ -55,7 +55,7 @@ function MainFun_detect_SJIS_3(options)
         RROI = ROI_delete1(label_MAT,options.pixels_range(1),options.pixels_range(2)); % pixel数で選別
         %}
         
-        level = graythresh(mask); % 閾値を決定
+        level = graythresh(mask)-0.1; % 閾値を決定
         BW = im2bw(mask,level); % しきい値に基づき、イメージをバイナリ イメージに変換
         BW2 = kubire_delete(BW); %１ピクセルで括れて連結している閉領域を２つに分ける(1 pixel重なっている場合、2つに分離)
         % Watershed
@@ -71,7 +71,7 @@ function MainFun_detect_SJIS_3(options)
         BW6 = bwareafilt(BW5,[options.pixels_range(1) options.pixels_range(2)]);
         RROI = bwlabel(BW6, 8);
         roi_num = max(RROI(:));
-        [Height2,Width2]=size(RROI);
+        %[Height2,Width2]=size(RROI);
         
          %% imageの端を0で埋める(境界値条件のようなもの)
         %{ 
