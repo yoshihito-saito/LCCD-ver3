@@ -10,9 +10,9 @@ out_path = append(out_Dir, '/01_ROI_detection/ver_3');
 addpath(genpath(code_path));
 
 procs = {
-    '01_NoRMCorre',         1;... %1
-    '02_simp_roi_detect',   1;... %1
-    '03_roi_marge',         1;... %1
+    '01_NoRMCorre',         0;... %1
+    '02_simp_roi_detect',   0;... %1
+    '03_roi_marge',         0;... %1
     '04_signal_extraction', 1;...
     '05_calculate_metrics',1;
     '06_region_mapping',0;};
@@ -28,7 +28,7 @@ options.raw_path = raw_path;
 
 options.Samprate = 15.2;
 %% Concatinate multiple recording
-options.concat = 0;
+options.concat = 1;
 
 %% for 01_NoRMCorre
 options.opt_noRMCorre.d1 = 1024;
@@ -51,13 +51,13 @@ options.sigma = 0.5; % 0.2 for 2k
 options.rollingball = 5; %pixels
 
 % pixel数
-options.pixels_range = [10 30];%[30, 120];
+options.pixels_range = [10 40];%[30, 120];
 % 偏心度
 options.eccen_th = 0.99; 
 options.err_th = 1.2;
 
 %% for 03_roi_marge
-options.a = 0.8; %0.4 %ROIをマージさせる際の重なっている割合（例：0.3=30%）
+options.a = 0.6; %0.4 %ROIをマージさせる際の重なっている割合（例：0.3=30%）
 %options.pixels_range = [30, 80];
 
 %% for 04 signal extraction
@@ -89,4 +89,4 @@ options.Threshold.nearby = 1.5; % 近傍判定（ROI直径に対する比）
 
 %Noise variance
 options.NoiseLowHigh = [6,7.5];
-options.Threshold.noisevar = 0.03;
+options.Threshold.noisevar = 0.005;
