@@ -101,6 +101,7 @@ function MainFun_Extract_Signals(options)
         F_soma = cell2mat(F_soma);
         F_neuropil = cell2mat(F_neuropil);
         dF_F = Sub_Calc_dFF(F_soma, F_neuropil, options);
+        %dF_F = Sub_Calc_dFF(F_soma{1}, F_neuropil{1}, options);
     end
 
     FileName = fullfile(out_path, 'dF_F.mat');
