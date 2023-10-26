@@ -24,7 +24,7 @@ fprintf(1,'\t\t\tThe number of cells to meet the following constions\n');
 fprintf(1,'\t\t\t%4.2f less df/f, %f (%%)\n',Threshold.dff_ceiling,sum(dFF_flag1)/length(CellUse)*100);
 fprintf(1,'\t\t\t%4.2f more df/f, %f (%%)\n',Threshold.dff_floor,sum(dFF_flag1)/length(CellUse)*100);
 fprintf(1,'\t\t\t%4.2f more SN ratio, %f (%%)\n',Threshold.SN, sum(SN_flag)/length(CellUse)*100);
-fprintf(1,'\t\t\t%4.2f less Noise variance, %f (%%)\n',Threshold.noisevar, sum(noisevar_flag)/length(CellUse)*100);
+fprintf(1,'\t\t\t%4.4f less Noise variance, %f (%%)\n',Threshold.noisevar, sum(noisevar_flag)/length(CellUse)*100);
 
 
 

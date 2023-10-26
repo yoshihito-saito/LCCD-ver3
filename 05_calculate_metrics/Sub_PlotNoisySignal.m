@@ -21,8 +21,8 @@ function Sub_PlotNoisySignal(Time, dF_F, noise_variance, options)
     xlabel('Time (sec)');
     yticks([])
     box off
-    title('Under noise var. threshold signal')
-    exportgraphics(gcf, fullfile(options.procs.path{5},'Under_noisevar_signal.pdf'), 'Resolution',300);
+    title('Above noise var. threshold signal')
+    exportgraphics(gcf, fullfile(options.procs.path{5},'Above_noisevar_signal.pdf'), 'Resolution',300);
 
     if length(plot_signal_idx) > 50
         cell_id = randsample(s, plot_signal_idx, 50);
@@ -42,8 +42,8 @@ function Sub_PlotNoisySignal(Time, dF_F, noise_variance, options)
     xlabel('Time (sec)');
     yticks([])
     box off
-    title('Above noise var. threshold signal')
-    exportgraphics(gcf, fullfile(options.procs.path{5},'Above_noisevar_signal.pdf'), 'Resolution',300);
+    title('Under noise var. threshold signal')
+    exportgraphics(gcf, fullfile(options.procs.path{5},'Under_noisevar_signal.pdf'), 'Resolution',300);
 
     close all
 end
