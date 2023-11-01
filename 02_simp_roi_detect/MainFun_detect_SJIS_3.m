@@ -23,8 +23,16 @@ function MainFun_detect_SJIS_3(options)
         se = strel('disk',options.rollingball);
         lumi_max_img_2d = imtophat(lumi_max_img_2d,se);
         
+        % ゼロにしたい周囲のピクセル数を設定
+        borderWidth = options.opt_noRMCorre.max_shift;
+        
+        % 周囲のピクセルをゼロに設定
+        lumi_max_img_2d(1:borderWidth, :, :) = 0;          % 上辺
+        lumi_max_img_2d((end-borderWidth+1):end, :, :) = 0; % 下辺
+        lumi_max_img_2d(:, 1:borderWidth, :) = 0;          % 左辺
+        lumi_max_img_2d(:, (end-borderWidth+1):end, :) = 0; % 右辺
 
-        %% 規格化
+        %% 規格化 0-1
         max_int = max(max(lumi_max_img_2d,[],1),[],2);
         min_int = min(min(lumi_max_img_2d,[],1),[],2);
         lumi_max_img = (lumi_max_img_2d-min_int)./(max_int-min_int);
@@ -42,19 +50,6 @@ function MainFun_detect_SJIS_3(options)
         mask = (mask - mn)./(mx-mn);
         imwrite(double(mask), fullfile(out_path, sprintf('Image_std_%02d.tif',FNum)));
 
-        %{
-        level = graythresh(mask); % 閾値を決定
-        BW = im2bw(mask,level); % しきい値に基づき、イメージをバイナリ イメージに変換
-        BW2 = kubire_delete(BW); %１ピクセルで括れて連結している閉領域を２つに分ける(1 pixel重なっている場合、2つに分離)
-        if options.useGPU
-	        label_MAT = bwlabel(gpuArray(BW2),8); %ROIにラベル付け
-	    else
-	        label_MAT = bwlabel(BW2,8); %ROIにラベル付け
-        end
-        
-        RROI = ROI_delete1(label_MAT,options.pixels_range(1),options.pixels_range(2)); % pixel数で選別
-        %}
-        
         level = graythresh(mask)-0.1; % 閾値を決定
         BW = im2bw(mask,level); % しきい値に基づき、イメージをバイナリ イメージに変換
         BW2 = kubire_delete(BW); %１ピクセルで括れて連結している閉領域を２つに分ける(1 pixel重なっている場合、2つに分離)
