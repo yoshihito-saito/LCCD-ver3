@@ -44,6 +44,6 @@ if options.procs.exec(6)
     MainFun_RegionMapping(options);
 end
 tEnd = toc(tStart);
-fprintf(1,'\n\tTotalElapsed time %4.2f min\n\n', tEnd/60);
+fprintf(1,'\n\tTotal Elapsed time %4.2f min\n\n', tEnd/60);
 diary off;
 delete(gcp('nocreate'));

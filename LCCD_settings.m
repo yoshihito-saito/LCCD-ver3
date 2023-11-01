@@ -11,8 +11,8 @@ addpath(genpath(code_path));
 
 procs = {
     '01_NoRMCorre',         0;... %1
-    '02_simp_roi_detect',   0;... %1
-    '03_roi_marge',         0;... %1
+    '02_simp_roi_detect',   1;... %1
+    '03_roi_marge',         1;... %1
     '04_signal_extraction', 1;...
     '05_calculate_metrics',1;
     '06_region_mapping',0;};
@@ -28,7 +28,7 @@ options.raw_path = raw_path;
 
 options.Samprate = 15.2;
 %% Concatinate multiple recording
-options.concat = 1;
+options.concat = 0;
 
 %% for 01_NoRMCorre
 options.opt_noRMCorre.d1 = 1024;
@@ -53,7 +53,7 @@ options.rollingball = 5; %pixels
 % pixel数
 options.pixels_range = [10 40];%[30, 120];
 % 偏心度
-options.eccen_th = 0.99; 
+options.eccen_th = 0.6; 
 options.err_th = 1.2;
 
 %% for 03_roi_marge
