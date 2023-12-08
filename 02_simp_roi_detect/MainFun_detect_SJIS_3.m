@@ -17,7 +17,8 @@ function MainFun_detect_SJIS_3(options)
         [Height, Width, T] = size(ImageData);
 
         %tic;
-        lumi_max_img_2d = std((double(ImageData)-mean(ImageData,3))./mean(ImageData,3),[],3);
+        % lumi_max_img_2d = std((double(ImageData)-mean(ImageData,3))./mean(ImageData,3),[],3);
+        lumi_max_img_2d = std(double(ImageData),[],3);
         lumi_max_img_2d = imgaussfilt(lumi_max_img_2d,options.sigma);
         %lumi_max_img_2d = imgaussfilt(lumi_max_img_2d,0.5);
         se = strel('disk',options.rollingball);
@@ -50,8 +51,9 @@ function MainFun_detect_SJIS_3(options)
         mask = (mask - mn)./(mx-mn);
         imwrite(double(mask), fullfile(out_path, sprintf('Image_std_%02d.tif',FNum)));
 
-        level = graythresh(mask)-0.1; % 閾値を決定
-        BW = im2bw(mask,level); % しきい値に基づき、イメージをバイナリ イメージに変換
+        level = graythresh(mask)-options.threshold_mod; % 閾値を決定
+        BW = imbinarize(mask,level); % しきい値に基づき、イメージをバイナリ イメージに変換
+        
         BW2 = kubire_delete(BW); %１ピクセルで括れて連結している閉領域を２つに分ける(1 pixel重なっている場合、2つに分離)
         % Watershed
         BW3 = imfill(BW2, 'holes');
