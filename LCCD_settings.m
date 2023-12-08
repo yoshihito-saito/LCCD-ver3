@@ -1,5 +1,6 @@
 code_path = '/mnt/ssd1/ysaito/with_Uwamori/00_code/LCCD-ver3-main';
-data_Dir = '/mnt/ssd1/ysaito/with_Uwamori/01_data/';
+%data_Dir = '/mnt/ssd1/ysaito/with_Uwamori/01_data/';
+data_Dir = '/home/ysaito/Synology/Collab/with_Uwamori/01_data';
 raw_path = uigetdir(data_Dir);
 out_Dir = replace(raw_path, '01_data', '02_analysis');
 out_path = append(out_Dir, '/01_ROI_detection/ver_3');
@@ -23,7 +24,8 @@ options.procs = cell2table(cat(2, procs, paths), ...
 options.useGPU = true; %false;
 % Default parameters are for 1K imaging
 %% parameters 
-options.atlas_path = raw_path;
+options.code_patj = code_path;
+options.atlas_path = append(raw_path, '/atlas.mat');
 options.raw_path = raw_path;
 
 options.Samprate = 15.2;
@@ -37,7 +39,7 @@ options.opt_noRMCorre.grid_size = [128,128];
 options.opt_noRMCorre.overlap_pre = [32,32];
 options.opt_noRMCorre.mot_uf = 4;
 options.opt_noRMCorre.bin_width = 250;
-options.opt_noRMCorre.max_shift = 30;
+options.opt_noRMCorre.max_shift = 10;
 options.opt_noRMCorre.max_dev = [8,8];
 options.opt_noRMCorre.output_type = 'hdf5';
 options.opt_noRMCorre.mem_batch_size = 250;
@@ -49,11 +51,14 @@ options.sigma = 0.5; % 0.2 for 2k
 
 % Background substruction rolling ball filter size
 options.rollingball = 5; %pixels
-
+% Threshold modulation: 
+% 0 means no modulation after threhsolding by Otsu method.
+% subtract defined value from the estimated threshold value.
+options.threshold_mod = 0.05;
 % pixel数
-options.pixels_range = [10 40];%[30, 120];
+options.pixels_range = [8 40];%[30, 120];
 % 偏心度
-options.eccen_th = 0.6; 
+options.eccen_th = 0.9; %small value -> circule
 options.err_th = 1.2;
 
 %% for 03_roi_marge
