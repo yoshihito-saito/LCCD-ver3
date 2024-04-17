@@ -10,20 +10,24 @@ function Sub_PlotLowSNR(Time, dF_F, SNR, options)
         noncell_id = plot_noise_idx;
     end
     
-    figure('Position', [500 500 1000 400])
-    for i = noncell_id
-        ii = find(noncell_id==i);
-        plot(Time, dF_F(i,:)+5*ii, ...
-            'LineWidth',1, ...
-            'Color',[0.85,0,0])
+    if length(noncell_id) ~= 0;
+        figure('Position', [500 500 1000 400])
+        for i = noncell_id
+            ii = find(noncell_id==i);
+            plot(Time, dF_F(i,:)+5*ii, ...
+                'LineWidth',1, ...
+                'Color',[0.85,0,0])
+        end
+    
+        xlim([0 max(Time)]);
+        ylim([0 max(ii*5+5)]);
+        xlabel('Time (sec)');
+        yticks([])
+        box off
+        title('Under SNR treshold signal')
+        exportgraphics(gcf, fullfile(options.procs.path{5},'Under_SNR_signal.pdf'), 'Resolution',300);
+
     end
-    xlim([0 max(Time)]);
-    ylim([0 max(ii*5+5)]);
-    xlabel('Time (sec)');
-    yticks([])
-    box off
-    title('Under SNR treshold signal')
-    exportgraphics(gcf, fullfile(options.procs.path{5},'Under_SNR_signal.pdf'), 'Resolution',300);
 
     if length(plot_signal_idx) > 50
         cell_id = randsample(s, plot_signal_idx, 50);

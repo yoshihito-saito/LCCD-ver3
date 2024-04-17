@@ -1,4 +1,4 @@
-function Sub_Histogram_SNR(SNR, FolderName)
+function Sub_Histogram_SNR(SNR, options)
 
 close all
 
@@ -8,7 +8,21 @@ global SplitFreq
 for i=1:length(SNR)
     Ratio(i)  = SNR(i).Ratio;
 end
+%% Histogram
+h = histogram(Ratio);
+c = h.BinWidth;
+h.BinWidth = 0.5;
+set(gca,'FontSize',12);
+set(gca,'FontName','Times New Roman');
+xlabel('SNR');
+ylabel('Count');
 
+%% Save
+FolderName=options.procs.path{5};
+FileName   = fullfile(FolderName, sprintf('Histogram_SNR'));
+saveas(gcf, strcat(FileName,'.pdf'), 'pdf');
+
+%{
 %% Histogram
 Edges = min(Ratio):0.2:max(Ratio);
 Hist.x = (Edges(1:end-1)+Edges(2:end))/2;
@@ -24,9 +38,10 @@ title( sprintf('SplitFreq%4.2f',SplitFreq));
 grid on
 
 %% Save
+FolderName=options.procs.path{5};
 FileName   = fullfile(FolderName, sprintf('Histogram_SplitFreq%4.2f',SplitFreq));
-saveas(gcf, strcat(FileName,'.png'),'png');
-saveas(gcf, strcat(FileName,'.fig'), 'fig');
+%saveas(gcf, strcat(FileName,'.png'),'png');
+saveas(gcf, strcat(FileName,'.pdf'), 'pdf');
 
 %% Cumulative distribution
 [f, x] = ecdf(Ratio);
@@ -43,7 +58,9 @@ grid on
 
 %% Save
 FileName   = fullfile(FolderName, sprintf('Cumulative_SplitFreq%4.2f',SplitFreq));
-saveas(gcf, strcat(FileName,'.png'),'png');
-saveas(gcf, strcat(FileName,'.fig'), 'fig');
+%saveas(gcf, strcat(FileName,'.png'),'png');
+saveas(gcf, strcat(FileName,'.pdf'), 'pdf');
+%}
+
 end
 

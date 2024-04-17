@@ -34,7 +34,8 @@ function MainFun_QualityMetrics(options)
     %% Calculate Signal Noise Ratio
     fprintf(1,'\tCalculate Signal Noise Ratio\n');
     SNR = Sub_Calculate_SignalNoiseRatio(SNR);
-    Sub_PlotLowSNR(Time, dF_F, SNR, options) 
+    Sub_PlotLowSNR(Time, dF_F, SNR, options);
+    Sub_Histogram_SNR(SNR, options)
     %SNR= Sub_Calc_SNR(dF_F, options);
    
 
@@ -53,32 +54,14 @@ function MainFun_QualityMetrics(options)
     [nearby_CellUse, ~] = Sub_Check_nearbyCellToUse(rdF, dPerDia, SNR, Threshold);
     
     [filtered_dF_F, noise_variance] = Sub_Calc_noise_variance(dF_F, options);
+    Sub_Histogram_NV(noise_variance, options)
     % Plot noies and cell signal when you set the threshold
     Sub_PlotNoisySignal(Time, dF_F, noise_variance, options) 
     
     %% Decide Cells to Use
     CellUse = Sub_Decide_CellsToUse(dF_F, SNR, Threshold, nearby_CellUse, noise_variance);
     Sub_Plot_QualityCheck(Time, dF_F, CellUse, options)
-    %% Artifact detection
-    %fprintf(1,'\tArtifact detection\n');
-    %dF_F_use = dF_F(CellUse,:);
-    %Ratio = vertcat(SNR.Ratio);
-    %SNR_use = Ratio(CellUse);
-    %art_sig_ratio_use = Sub_ArtifactFreqPower(dF_F_use, SampRate);
-    %art_sig_ratio = zeros(size(CellUse,1),1);
-    %art_sig_ratio(CellUse==1)=art_sig_ratio_use;
-    %art_sig_ratio(CellUse==0)=NaN;
-    %predicted_outlier_index = Sub_detectOutlier(art_sig_ratio_use, SNR_use, options.art_threshold);
-    
-    
-    %CellUse2 = zeros(size(CellUse,1),1);
-    %CellIdx = find(CellUse==1);
-    %CellIdx2 = CellIdx(predicted_outlier_index==0);
-    %CellUse2(CellIdx2)=1;
-    
-    %% Plot SNR and artifact/signal freqency power and Signals
-    %Sub_PlotOutliearDetection(SNR_use, art_sig_ratio_use, predicted_outlier_index, options.procs.path{5})
-    %Sub_PlotSignal(Time, dF_F_use, predicted_outlier_index, options.procs.path{5})
+
     %% Save ROI Mask images and Metrics
     disp('Create ROI mask images');
     folder_list = dir(fullfile(options.procs.path{3}, 'marged*'));
@@ -98,6 +81,12 @@ function MainFun_QualityMetrics(options)
     fname_2 = fullfile(options.procs.path{5}, 'ROI_Cell_color.tiff');
     imwrite(Cell_roi_color, fname_2);
     
+    nonCell_roi_outline = Sub_ROI_outline_map(nonCell_roi);
+    fname_3 = fullfile(options.procs.path{5}, 'ROI_nonCell_outline.tiff');
+    imwrite(nonCell_roi_outline, fname_3);
+    Cell_roi_outline = Sub_ROI_outline_map(Cell_roi);
+    fname_4 = fullfile(options.procs.path{5}, 'ROI_Cell_outline.tiff');
+    imwrite(Cell_roi_outline, fname_4);
     % ROI metrics, SNR, Artifact Power Ratio, Area, Centroid, CellUse
     ROI_metrics = struct();
     ROI_metrics.SNR = single(vertcat(SNR.Ratio));

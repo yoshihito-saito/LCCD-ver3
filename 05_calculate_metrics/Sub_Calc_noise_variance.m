@@ -33,4 +33,6 @@ function [filtered_dF_F, noise_variance] = Sub_Calc_noise_variance(dF_F, options
 
     filtered_dF_F = bandpass(dF_F, options.NoiseLowHigh(1), options.NoiseLowHigh(2), options.Samprate);
     noise_variance = var(filtered_dF_F, 0, 2);
+
+    
 end

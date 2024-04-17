@@ -29,7 +29,6 @@ function Sub_PlotNoisySignal(Time, dF_F, noise_variance, options)
     else
         cell_id = plot_signal_idx;
     end
-
     figure('Position', [500 500 1000 400])
     for i = cell_id
         ii = find(cell_id==i);

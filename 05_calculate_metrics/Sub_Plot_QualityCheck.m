@@ -3,8 +3,11 @@ function Sub_Plot_QualityCheck(Time, dF_F, CellUse, options)
     
     for iter = 1:10
         s = RandStream('mlfg6331_64', 'Seed', iter);
-        cell_id = randsample(s, plot_signal_idx, 50);
-        
+        if length(plot_signal_idx) > 50
+            cell_id = randsample(s, plot_signal_idx, 50);
+        else
+            cell_id = plot_signal_idx;
+        end
         figure('Position', [500 500 1000 800])
         for i = cell_id
         ii = find(cell_id==i);
