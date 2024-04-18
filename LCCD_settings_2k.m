@@ -43,7 +43,7 @@ options.opt_noRMCorre.us_fac = 50;
 options.opt_noRMCorre.upd_template = 0;
 %% for 02_simp_roi_detect
 % Gaussian filter
-options.sigma = 0.5; % 0.2 for 2k
+options.sigma = 0.2; % 0.2 for 2k
 
 % Background substruction rolling ball filter size
 options.rollingball = 5; %pixels
